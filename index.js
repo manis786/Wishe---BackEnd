@@ -15,7 +15,22 @@ app.use(cors());
 app.use(express.json());
 
 // Database Connect Call
-connectDB();
+// connectDB();
+
+
+// Connect to MongoDB from Vercel
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+// Routes
 
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
