@@ -2,9 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import adminRoutes from './routes/admin.routes.js'; // Apne folder path ke mutabiq import adjust kar lena
-import productRoutes from './routes/product.routes.js'
-import connectDB from './config/connectDB.js'
+import adminRoutes from './routes/admin.routes.js';
+import productRoutes from './routes/product.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import connectDB from './config/connectDB.js';
 dotenv.config();
 
 const app = express();
@@ -13,10 +14,6 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Database Connect Call
-// connectDB();
-
 
 // Connect to MongoDB from Vercel
 app.use(async (req, res, next) => {
@@ -29,11 +26,10 @@ app.use(async (req, res, next) => {
   }
 });
 
-
 // Routes
-
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Root Endpoint
 app.get('/', (req, res) => {
