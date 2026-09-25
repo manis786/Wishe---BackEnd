@@ -1,4 +1,5 @@
 import Order from '../models/order.model.js';
+import { sendOrderNotificationEmail } from '../libs/mailer.js';
 
 // Create a new order (from storefront checkout)
 export const createOrder = async (req, res) => {
@@ -52,6 +53,11 @@ export const createOrder = async (req, res) => {
     });
 
     const savedOrder = await newOrder.save();
+
+    // Trigger async email notification (does not block client response)
+    sendOrderNotificationEmail(savedOrder).catch(err =>
+      console.error('Async email notification error:', err.message)
+    );
 
     res.status(201).json({
       success: true,
